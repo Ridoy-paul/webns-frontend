@@ -1,0 +1,1 @@
+import React from 'react'; import styles from './LoadingSkeleton.module.css'; const LoadingSkeleton = () => { return ( <div className={styles.loaderWrapper}> <div className={styles.loader}></div> </div> ); }; export default LoadingSkeleton; 
