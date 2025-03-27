@@ -17,7 +17,7 @@ export default function Sidebar() {
                 const response = await networkCaller.getRequest(Urls.authProfile());
                 if (response && response.isSuccess) {
                     setUserInfo(response.responseData);
-                    setUserName(data.type === 'admin' ? 'Hello Admin!' : `Hello ${data.name}`);
+                    setUserName(response.responseData.type == 'admin' ? 'Hello Admin!' : `Hello ${response.responseData.name}`);
                 }
             }
             
