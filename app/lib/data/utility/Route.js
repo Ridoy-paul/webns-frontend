@@ -1,12 +1,16 @@
 const routes = {
     home: '/',
-    login: '/login',
-    register: '/register',
     
-    user: {
-        dashboard: '/user/dashboard',
-        add_property: '/user/add-property',
-        all_properties: '/user/all-properties',
+    // property_details: (code) => `/property/${code}`,
+
+    ticket: {
+        dashboard: '/ticket/dashboard',
+        notification: '/ticket/notification',
+        create_ticket: '/ticket/create-ticket',
+        all_tickets: '/profile/all-tickets',
+        
+       
+        
     },
 
 

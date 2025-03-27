@@ -7,7 +7,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: http://localhost:8000/
+Host: http://toletbd.app
 
 # Sitemaps
-Sitemap: http://localhost:8000/sitemap.xml
+Sitemap: http://toletbd.app/sitemap.xml

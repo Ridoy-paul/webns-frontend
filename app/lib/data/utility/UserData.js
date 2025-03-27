@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 class UserData {
     static USER_AUTH_TOKEN = 'authToken';
     static USER_DATA_KEY = 'userData';
+    static USER_SEARCH_KEY = 'userSearch';
 
     // Store data asynchronously (though cookies themselves are not async, you may want to expand to async actions in the future)
     static async storeData(key, data, months, options = {}) {
@@ -67,6 +68,17 @@ class UserData {
         return await this.getData(this.USER_DATA_KEY, options);
     }
 
+    // Store search data asynchronously
+    static async storeSearchData(searchData, options = {}) {
+        await this.storeData(this.USER_SEARCH_KEY, { searchData }, 6, options);
+    }
+
+    // Get search data asynchronously
+    static async getSearchData(options = {}) {
+        const searchData = await this.getData(this.USER_SEARCH_KEY, options);
+        return searchData ? searchData.searchData : null;
+    }
+
     // Clear data asynchronously
     static async clearData(key, options = {}) {
         // Clear on client-side
@@ -84,6 +96,11 @@ class UserData {
     // Clear token asynchronously
     static async clearToken(options = {}) {
         await this.clearData(this.USER_AUTH_TOKEN, options);
+    }
+
+    // Clear search data asynchronously
+    static async clearSearchData(options = {}) {
+        await this.clearData(this.USER_SEARCH_KEY, options);
     }
 }
 

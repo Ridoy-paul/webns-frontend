@@ -1,57 +1,56 @@
 'use client';
-
-import { useState } from 'react';
-import { axiosInstance } from '@/app/lib/axios';
+import { NetworkCaller, Urls } from '@/app/components/Link';
 import { toast } from 'react-toastify';
-import { AuthenticationSystem } from '@/hooks/Authentication';
+import { useState } from 'react';
+import UserData from '@/app/lib/data/utility/UserData';
 import { setBearerToken } from '@/app/lib/axios';
-import { UserData } from '@/app/components/Link';
+import { AuthenticationSystem } from '@/hooks/Authentication';
 
-const RegisterComponent = () => {
-    const { csrf, mutate } = AuthenticationSystem();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+const RegisterComponent = ({ onRegister, isShowOtherInfo = true }) => {
+    const { mutate } = AuthenticationSystem();
+    const networkCaller = new NetworkCaller();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const [formData, setFormData] = useState({ name: '', email: '', password: '', password_confirmation: '' });
+    const [loading, setLoading] = useState({ register: false });
 
-        if (password !== confirmPassword) {
-            toast.error("Passwords do not match");
-            return;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleApiCall = async (url, data, onSuccess, onFailure, key) => {
+        setLoading((prev) => ({ ...prev, [key]: true }));
+        const response = await networkCaller.postRequest(url, data);
+        if (response?.isSuccess) {
+            onSuccess(response);
+        } else {
+            toast.error(response?.errorMessage || 'Something went wrong!');
+            onFailure?.();
         }
+        setLoading((prev) => ({ ...prev, [key]: false }));
+    };
 
-        setLoading(true);
+    const handleFinalSubmit = (e) => {
+        e.preventDefault();
+        const formDataN = new FormData();
+        Object.keys(formData).forEach((key) => formDataN.append(key, formData[key]));
 
-        try {
-            const response = await axiosInstance.post('/register', {
-                name,
-                email,
-                password
-            });
-
-            const responseData = response?.data;
-            
-            if (responseData.isSuccess == true) {
-                mutate()
-                const { _token, userData } = responseData.responseData;
+        handleApiCall(
+            Urls.authRegister(),
+            formDataN,
+            async (response) => {
+                mutate();
+                const { _token, ...userData } = response.responseData;
                 await UserData.storeToken(_token);
                 await UserData.storeUserData(userData);
                 setBearerToken(_token);
+
                 toast.success('Registration successful!');
-                window.location.href = '/user/dashboard';
-            } 
-            else {
-                toast.error(response.errorMessage);
-            }
-        } catch (error) {
-            //console.error(error);
-            toast.error(error?.response?.data?.errorMessage || 'An error occurred during registration');
-        } finally {
-            setLoading(false);
-        }
+                onRegister(true);
+            },
+            null,
+            'register'
+        );
     };
 
     return (
@@ -59,15 +58,16 @@ const RegisterComponent = () => {
             <div className="card">
                 <div className="card-body">
                     <div className="m-sm-3">
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleFinalSubmit}>
                             <div className="mb-3">
                                 <label className="form-label mb-1">Full name<span className='text-danger'>*</span></label>
                                 <input
                                     className="form-control form-control-lg"
                                     type="text"
                                     name="name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    id="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
                                     placeholder="Enter your name"
                                     required
                                 />
@@ -79,8 +79,9 @@ const RegisterComponent = () => {
                                     className="form-control form-control-lg"
                                     type="email"
                                     name="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    id="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
                                     placeholder="Enter your email"
                                     required
                                 />
@@ -92,8 +93,9 @@ const RegisterComponent = () => {
                                     className="form-control form-control-lg"
                                     type="password"
                                     name="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    id="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
                                     placeholder="Enter password"
                                     minLength={8}
                                     required
@@ -105,9 +107,10 @@ const RegisterComponent = () => {
                                 <input
                                     className="form-control form-control-lg"
                                     type="password"
-                                    name="confirmPassword"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    name="password_confirmation"
+                                    id="password_confirmation"
+                                    value={formData.password_confirmation}
+                                    onChange={handleChange}
                                     placeholder="Confirm your password"
                                     minLength={8}
                                     required
@@ -115,14 +118,8 @@ const RegisterComponent = () => {
                             </div>
 
                             <div className="d-grid gap-2 mt-3">
-                                <button type="submit" className="btn btn-lg btn-primary" disabled={loading}>
-                                    {loading ? (
-                                        <span className="spinner-border spinner-border-sm" role="status">
-                                            <span className="sr-only"></span>
-                                        </span>
-                                    ) : (
-                                        "Sign Up"
-                                    )}
+                                <button type="submit" className="btn btn-lg btn-primary" disabled={loading.register}>
+                                    {loading.register ? <Spinner /> : 'Register Account'}
                                 </button>
                             </div>
                         </form>
@@ -132,5 +129,11 @@ const RegisterComponent = () => {
         </div>
     );
 };
+
+const Spinner = () => (
+    <div className="spinner-border spinner-border-sm" role="status">
+        <span className="sr-only"></span>
+    </div>
+);
 
 export default RegisterComponent;

@@ -1,59 +1,30 @@
 'use client';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import RegisterComponent from "../Auth/RegisterComponent";
-import LoginComponent from "../Auth/LoginComponent";
-import { UserData } from '@/app/components/Link';
 import { useEffect, useState } from 'react';
 import LogoutComponent from './LogoutComponent';
+import { Link, UserData, NetworkCaller, Urls } from '@/app/components/Link';
 
 export default function Header() {
+    const networkCaller = new NetworkCaller();
     const [processing, setProcessing] = useState(true);
     const [userInfo, setUserInfo] = useState(null);
-    const [userToken, setUserToken] = useState(null);
 
-    const [stackUrls, setStackUrls] = useState([]);
-    const [loginModalShow, setLoginModalShow] = useState(false);
-    const [regModalShow, setRegModalShow] = useState(false);
-    
-    const handleLoginModalShow = () => {
-        setStackUrls((prevStack) => [...prevStack, window.location.pathname]);
-        window.history.pushState({}, '', '/login');
-        setLoginModalShow(true);
-    };
-
-    const handleRegModalShow = () => {
-        setStackUrls((prevStack) => [...prevStack, window.location.pathname]);
-        window.history.pushState({}, '', '/register');
-        setRegModalShow(true);
-    };
-
-    const handleClose = (type = 'login') => {
-        const previousUrl = stackUrls[stackUrls.length - 1] || '/';
-        window.history.replaceState({}, '', previousUrl);
-        type === 'login' ? setLoginModalShow(false) : setRegModalShow(false);
-        setStackUrls((prevStack) => prevStack.slice(0, -1));
-    };
 
     useEffect(() => {
         const fetchUserData = async () => {
-            try {
-                const userData = await UserData.getUserData();
-                const token = await UserData.getToken();
-                setUserToken(token);
-                setUserInfo(userData);
 
-                setProcessing(false);
-                
-            } catch (error) {
-                //console.error('Failed to fetch user data:', error);
+            const token = await UserData.getToken();
+            if(token != null) {
+                const response = await networkCaller.getRequest(Urls.authProfile());
+                if (response && response.isSuccess) {
+                    setUserInfo(response.responseData);
+                }
             }
+
+            setProcessing(false);
         };
 
         fetchUserData();
     }, []);
-
-    
 
     return (
         <>
@@ -93,14 +64,14 @@ export default function Header() {
                         ) : (
                             <>
                                 <li className="nav-item mx-2">
-                                    <Button className="nav-link border rounded px-2 mb-0 btn-outline-success" onClick={handleLoginModalShow}>
+                                    <Link className="nav-link border rounded px-2 mb-0" href='/login'>
                                         Login
-                                    </Button>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Button className="nav-link border rounded px-2 mb-0" onClick={handleRegModalShow} >
+                                    <Link className="nav-link border rounded px-2 mb-0" href='/register' >
                                         Register
-                                    </Button>
+                                    </Link>
                                 </li>
                             </>
                         )
@@ -108,38 +79,6 @@ export default function Header() {
                 </ul>
             </div>
         </nav>
-
-        {/* Login Modal  */}
-        <Modal
-            show={loginModalShow}
-            onHide={ () => handleClose('login')}
-            backdrop="static"
-            keyboard={false}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Login</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <LoginComponent />
-            </Modal.Body>
-        </Modal>
-
-        {/* Registration Modal  */}
-        <Modal
-            show={regModalShow}
-            onHide={() => handleClose('reg')}
-            backdrop="static"
-            keyboard={false}
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Registration</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <RegisterComponent />
-            </Modal.Body>
-        </Modal>
-
-
         </>
     );
 }

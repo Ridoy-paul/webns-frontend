@@ -1,5 +1,5 @@
 const config = {
-    siteUrl: 'http://localhost:8000/',
+    siteUrl: 'http://toletbd.app',
     generateRobotsTxt: true,
     robotsTxtOptions: {
       policies: [

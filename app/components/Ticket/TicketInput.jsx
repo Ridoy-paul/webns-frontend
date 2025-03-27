@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { axiosInstance } from '@/app/lib/axios';
 
 
-export default function PropertyInput({property = null}) {
+export default function TicketInput({property = null}) {
 
     const router = useRouter();
     const [authToken, setAuthToken] = useState(null);

@@ -1,0 +1,1 @@
+import Script from 'next/script'; export default function AppScript() { return ( <> <Script src="/assets/js/vendor/bootstrap.min.js" strategy="lazyOnload" /> <Script src="/assets/js/plugins/jquery.min.js" strategy="beforeInteractive" /> <Script src="/assets/js/script.js" strategy="lazyOnload" /> </> ); }

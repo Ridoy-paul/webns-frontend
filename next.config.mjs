@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      domains: ['images.pexels.com', 'localhost',],
+      domains: ['images.pexels.com', 'localhost', 'secure.toletbd.app'],
     },
     reactStrictMode: true,
   };

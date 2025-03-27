@@ -1,17 +1,10 @@
 import { Jost } from 'next/font/google';
-import Script from 'next/script';
+import Header from '@/app/components/Header/Header';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Sidebar from '@/app/components/Sidebar/Sidebar';
-import Header from '@/app/components/Header/Header';
-
-const jost = Jost({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
-  display: 'swap'
-});
+import Sidebar from './components/Sidebar/Sidebar';
+import Script from 'next/script';
 
 export const metadata = {
   title: "Assignments using Next JS, Laravel",
@@ -30,6 +23,13 @@ export const metadata = {
 
 };
 
+const jost = Jost({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  display: 'swap'
+});
+
 
 export default function RootLayout({ children }) {
   return (
@@ -38,7 +38,6 @@ export default function RootLayout({ children }) {
       <head>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link href="/assets/css/app.css" rel="stylesheet" />
-        
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
       </head>
 
@@ -62,7 +61,6 @@ export default function RootLayout({ children }) {
 
         <Script src="https://code.jquery.com/jquery-3.6.0.min.js" strategy="beforeInteractive" /> 
         <Script src="/assets/js/app.js" strategy="beforeInteractive" /> 
-        
       </body>
     </html>
   );
