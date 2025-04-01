@@ -1,5 +1,4 @@
 import Image from "next/image"
-import { Link, dynamicCategories } from '@/app/components/Link';
  
 export default function NotFound() {
   return (
@@ -10,14 +9,7 @@ export default function NotFound() {
                     <div className="auth-card py-5 rounded">
                         <div className="auth-card-form-body text-center">
                             <Image src="/assets/img/not-found.svg" alt="#" className='my-5' width={150} height={100} loading="lazy" />
-                            <h3 className="auth-card-title">Page Not Found!</h3>
-                            
-                            <div className="text-center my-4">
-                                <h3 className="mb-3">আপনি কি খুঁজছেন?</h3>
-                                {dynamicCategories.map(cat => (
-                                    <Link className="primary__btn m-1" key={cat.id} href={`/properties?category=${cat.index}`}>{cat.title}</Link>
-                                ))}
-                            </div>
+                            <h1 className="auth-card-title">Page Not Found!</h1>
                         </div>
                     </div>
                 </div>

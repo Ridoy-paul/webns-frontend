@@ -16,17 +16,21 @@ const Urls = {
     authProfile: () => `${BASE_URL}/profile`,
     updateProfile: () => `${BASE_URL}/update-profile`,
 
+    // Dashboard Data URL
+    getDashboardDataUrl: () => `${BASE_URL}/dashboard/get-report`,
+
+
 
     // Ticket Url
     getTicketStatusAndCategoryUrl: () => `${BASE_URL}/ticket/get-status-category`,
+    saveTicketDataUrl: () => `${BASE_URL}/ticket/save-ticket-data`,
+    getTicketList: () => `${BASE_URL}/ticket/get-list`,
+    getticketItem: () => `${BASE_URL}/ticket/get-item`,
+    deleteTicketItemUrl: () => `${BASE_URL}/ticket/delete-item`,
+    getticketItemComments: () => `${BASE_URL}/ticket/get-item-comments`,
+    saveTicketCommentUrl: () => `${BASE_URL}/ticket/save-item-comments`,
     
-    
-    
-
-    
-    
-    
-    
+    //Live Chat Url
     
     
     userLoginEmailVerification: (phone) => `${BASE_URL}/UserLogin/${encodeURIComponent(phone)}`,

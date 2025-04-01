@@ -74,23 +74,38 @@ class NetworkCaller {
   async postRequest(url, body = {}) {
     try {
       const csToken = await this.csrfTokenRequest();
+      const response = await axios.post(url, body, {
+        headers: {
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': csToken,
+        },
+      });
+
+      const data = response.data;
+      return data;
+
+    } catch (error) {
+      await this.handleRequestError(error);
+    }
+  }
+
+  async postRequestWithToken(url, body = {}) {
+    try {
+      if (!this.token) {
+        await this.initialize();
+      }
+      
+      const csToken = await this.csrfTokenRequest();
 
       const response = await axios.post(url, body, {
         headers: {
           'Accept': 'application/json',
           'X-CSRF-TOKEN': csToken,
-          // 'Authorization': `Bearer ${this.token}`,
+          'Authorization': `Bearer ${this.token}`,
         },
       });
 
       const data = response.data;
-
-      /*
-      if (!response.status == 200) {
-        toast.error(data.errorMessage || 'An error occurred.');
-      }
-      */
-
       return data;
 
     } catch (error) {
@@ -99,10 +114,11 @@ class NetworkCaller {
   }
 
   async handleRequestError(error) {
+    
     if(error.response.status == 401) {
-      await UserData.clearToken();
-      await UserData.clearUserData();
-      window.location.href = '/login';
+      // await UserData.clearToken();
+      // await UserData.clearUserData();
+      // window.location.href = '/login';
     }
 
     // This is for validation error

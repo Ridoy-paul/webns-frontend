@@ -7,7 +7,7 @@ const routes = {
         dashboard: '/ticket/dashboard',
         notification: '/ticket/notification',
         create_ticket: '/ticket/create-ticket',
-        all_tickets: '/profile/all-tickets',
+        all_tickets: '/ticket/all-tickets',
         
        
         
