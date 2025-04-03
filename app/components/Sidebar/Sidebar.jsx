@@ -75,12 +75,15 @@ export default function Sidebar() {
                                     <span className="align-middle">Dashboard</span>
                                 </Link>
                             </li>
-                            <li className="sidebar-item">
-                                <Link className="sidebar-link" href={routes.ticket.create_ticket}>
-                                    <i className="align-middle" data-feather="user" />
-                                    <span className="align-middle">Create New Ticket</span>
-                                </Link>
-                            </li>
+                            {userInfo?.type == 'user' && (
+                                <li className="sidebar-item">
+                                    <Link className="sidebar-link" href={routes.ticket.create_ticket}>
+                                        <i className="align-middle" data-feather="user" />
+                                        <span className="align-middle">Create New Ticket</span>
+                                    </Link>
+                                </li>
+                            )}
+                            
                             <li className="sidebar-item">
                                 <Link className="sidebar-link" href={routes.ticket.all_tickets}>
                                     <i className="align-middle" data-feather="user" />
