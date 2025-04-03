@@ -15,8 +15,6 @@ export default function AllTicket() {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [chatTicketId, setChatTicketId] = useState(null);
-    
-    
 
     const fetchTicketList = async () => {
         const response = await networkCaller.getRequest(Urls.getTicketList());

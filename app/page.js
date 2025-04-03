@@ -1,15 +1,12 @@
 export default function Home() {
   const features = [
-    "✅Authentication: Email, Password, Google Oauth system.",
-    "✅Parallel and Intercepting Routing System.",
-    "✅Server-Side Rendering for Manage Hotels / Property Page",
-    "✅Pagination in Manage Hotels Page",
-    "✅Property Details Navigation",
-    "✅Hotel Creation Feature",
-    "✅Hotel Editing Feature",
-    "✅Hotel Deletion Feature",
-    "✅Social Media Sharing",
-    "✅Error Handling",
+    "✅ User Authentication System: Login, Registration.",
+    "✅ Database Seeder for Category and Ticket Status.",
+    "✅ Create Ticket system with file attachment upload.",
+    "✅ Only Admin can edit ticket information.",
+    "✅ Role based Ticket List show. Admin can see all user tiekets, User can see only their tickets.",
+    "✅ Ticket wise Live chat system using web-sockets.",
+    "✅ Simple Dashboard Ticket Status Report",
   ];
 
   return (
